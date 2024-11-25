@@ -3,39 +3,46 @@ import Product from '../product/Product';
 import './ProductList.css';
 
 const ProductList = () => {
+  // Estado para almacenar los productos
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
+  // Hacer fetch a la API para obtener los productos
   useEffect(() => {
-    fetch('/productos') // El proxy en React se encargará de redirigir la solicitud a http://localhost:3000
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Data: ', data);
-        setProducts(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error('Error fetching data: ', err);
-        setError(err);
-        setLoading(false);
-      });
-  }, []);
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/productos');
+        const data = await response.json();
+        setProducts(data); // Guardar los productos en el estado
+      } catch (error) {
+        console.error('Error al obtener productos:', error);
+      }
+    };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error loading products: {error.message}</div>;
-  }
+    fetchProducts();
+  }, []); // El array vacío significa que solo se ejecutará una vez al montar el componente
 
   return (
-    <div className="container-products">
-      {products.map((product) => (
-        <Product key={product.id} product={product} />
-
-      ))}
+    <div className='container-all'>
+      <div className='container-filters'>
+        <p className='p-filters'>Search by Filters</p>
+        <input type='text' placeholder='Search...' />
+        <button>Search</button>
+        <select>
+          <option value=''>Filter by price</option>
+          <option value=''>Price: Low to High</option>
+          <option value=''>Price: High to Low</option>
+        </select>
+      </div>
+      <div className="container-products">
+        {/* Mostrar los productos en el componente Product */}
+        {products.length > 0 ? (
+          products.map((product) => (
+            <Product key={product.id} product={product} />
+          ))
+        ) : (
+          <p>Loading products...</p>
+        )}
+      </div>
     </div>
   );
 };

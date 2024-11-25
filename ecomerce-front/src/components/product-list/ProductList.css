@@ -1,6 +1,6 @@
 .container-products {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     justify-content: center;
     flex-direction: row;
     height:auto;
@@ -13,13 +13,12 @@
     justify-content: center;
     flex-direction: row;
     padding: 0px;
-    width: 100%;
+    
   }
 
 .container-filters{
   display: flex;
   flex-direction: column;
-  width: 100%;
   height: auto;
   gap: 15px;
   padding: 15px;
